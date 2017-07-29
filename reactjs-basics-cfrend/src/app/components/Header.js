@@ -1,4 +1,6 @@
 import React from "react";
+import {Link} from "react-router";
+
 //stateless constant component header example
 export const Header = (props) => {
                   return(
@@ -6,9 +8,9 @@ export const Header = (props) => {
                               <div className="container">
                                     <div className="navbar-header">
                                           <ul className="nav navbar-nav">
-                                                <li><a href="">CYUTIL</a></li>
-                                                <li><a href="">Company</a></li>
-                                                <li><a href="">cy.PIPES™</a></li>
+                                                <li><Link to={"/home"} activeStyle={{color: "Red"}}>CYUTIL</Link></li>
+                                                <li><Link to={"/user/"+(10)} activeStyle={{color: "Red"}} activeClassName={"active"}>Company</Link></li>
+                                                <li><Link to={"/home-single"}>cy.PIPES™</Link></li>
                                                 <li><a href="">For Developers</a></li>
                                                 <li><a href="">{props.homeLink}</a></li>
                                                 <li><form className="form-inline my-2 my-lg-0">

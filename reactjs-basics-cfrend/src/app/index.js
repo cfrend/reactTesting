@@ -14,7 +14,7 @@ class App extends React.Component{
                               {/*IndexRoute aggrages various URLs like domain.io/ or domain.io/home to the same home component URL*/}
                               <IndexRoute component={Home}  />
                               {/*The Root component persists as the /child components are rendered below*/}
-                              <Route path={"user"} component={User} />
+                              <Route path={"user/:id"} component={User} />
                               <Route path={"home"} component={Home} />
                         </Route>
                         {/*A component that is not a child of root.*/}
