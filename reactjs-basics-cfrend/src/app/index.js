@@ -9,7 +9,8 @@ class App extends React.Component {
 constructor(){
       super();
       this.state = {
-            homeLink: "Home"
+            homeLink: "Admin Change",
+            homeMounted: true
       };
 }
 //example function
@@ -24,7 +25,26 @@ onChangeLinkName(newName){
       });
 }
 
+onChangeHomeMounted(){
+      this.setState({
+                  homeMounted: !this.state.homeMounted
+      });
+}
+
   render() {
+        let homeCmp = "";
+        if (this.state.homeMounted){
+             //JSX Comment syntax & calling the Home component and passing some prop values including a function as a prop greet
+             homeCmp = (
+                  <Home
+                   name={"Chauncey"}
+                   initialAge={32}
+                   greet={this.onGreet}
+                   changeLink={this.onChangeLinkName.bind(this)}
+                   initialLinkName={this.state.homeLink}
+                   />
+             );
+       }
         return (
              <div className="container">
                   <div className="row">
@@ -34,14 +54,12 @@ onChangeLinkName(newName){
                   </div>
                   <div className="row">
                         <div className="col-xs-10 col-xs-offset-1">
-                              {/*JSX Comment syntax & calling the Home component and passing some prop values including a function as a prop greet*/}
-                              <Home
-                                    name={"Chauncey"}
-                                    initialAge={32}
-                                    greet={this.onGreet}
-                                    changeLink={this.onChangeLinkName.bind(this)}
-                                    initialLinkName={this.state.homeLink}
-                              />
+                              {homeCmp}
+                        </div>
+                  </div>
+                  <div className="row">
+                        <div className="col-xs-10 col-xs-offset-1">
+                              <button onClick={this.onChangeHomeMounted.bind(this)} className="btn btn-primary">(Un)Mount Home Component</button>
                         </div>
                   </div>
              </div>
