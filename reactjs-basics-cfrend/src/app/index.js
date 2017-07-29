@@ -1,70 +1,26 @@
 import React from "react";
-import { render } from "react-dom";
+import {render} from "react-dom";
+import {Router, Route, browserHistory, IndexRoute} from "react-router";
 
-//importing in the child components
-import { Header } from "./components/Header";
-import { Home } from "./components/Home";
+import {Root} from "./components/Root";
+import {Home} from "./components/Home";
+import {User} from "./components/User";
 
-class App extends React.Component {
-constructor(){
-      super();
-      this.state = {
-            homeLink: "Admin Change",
-            homeMounted: true
-      };
+class App extends React.Component{
+      render(){
+            return(
+                  <Router history={browserHistory}>
+                        <Route path={"/"} component={Root}>
+                              {/*IndexRoute aggrages various URLs like domain.io/ or domain.io/home to the same home component URL*/}
+                              <IndexRoute component={Home}  />
+                              {/*The Root component persists as the /child components are rendered below*/}
+                              <Route path={"user"} component={User} />
+                              <Route path={"home"} component={Home} />
+                        </Route>
+                        {/*A component that is not a child of root.*/}
+                        <Route path={"home-single"} component={Home} />
+                  </Router>
+            );
+      }
 }
-//example function
-onGreet(){
-      alert("Hello!");
-}
-
-onChangeLinkName(newName){
-      //trigger a rerendering of the UI
-      this.setState({
-            homeLink: newName
-      });
-}
-
-onChangeHomeMounted(){
-      this.setState({
-                  homeMounted: !this.state.homeMounted
-      });
-}
-
-  render() {
-        let homeCmp = "";
-        if (this.state.homeMounted){
-             //JSX Comment syntax & calling the Home component and passing some prop values including a function as a prop greet
-             homeCmp = (
-                  <Home
-                   name={"Chauncey"}
-                   initialAge={32}
-                   greet={this.onGreet}
-                   changeLink={this.onChangeLinkName.bind(this)}
-                   initialLinkName={this.state.homeLink}
-                   />
-             );
-       }
-        return (
-             <div className="container">
-                  <div className="row">
-                        <div className="col-xs-10 col-xs-offset-1">
-                              <Header homeLink={this.state.homeLink}/>
-                        </div>
-                  </div>
-                  <div className="row">
-                        <div className="col-xs-10 col-xs-offset-1">
-                              {homeCmp}
-                        </div>
-                  </div>
-                  <div className="row">
-                        <div className="col-xs-10 col-xs-offset-1">
-                              <button onClick={this.onChangeHomeMounted.bind(this)} className="btn btn-primary">(Un)Mount Home Component</button>
-                        </div>
-                  </div>
-             </div>
-       );
-  }
-}
-
-render(<App/>,window.document.getElementById('app'));
+render(<App />, window.document.getElementById('app'));
