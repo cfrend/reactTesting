@@ -1,26 +1,67 @@
-import React from "react";
-import {render} from "react-dom";
-import {Router, Route, browserHistory, IndexRoute} from "react-router";
+// import React from "react";
+// import {render} from "react-dom";
+//
+// import { User } from './components/User';
+// import { Main } from './components/Main';
+//
+// class App extends React.Component {
+//     constructor() {
+//         super();
+//         this.state = {
+//             username: "Chauncey"
+//         };
+//     }
+//
+//     changeUsername(newName) {
+//         this.setState({
+//             username: newName
+//         });
+//     }
+//
+//     render() {
+//         return (
+//             <div className="container">
+//                 <Main changeUsername={this.changeUsername.bind(this)}/>
+//                 <User username={this.state.username}/>
+//             </div>
+//         );
+//     }
+// }
+//
+// render(<App />, window.document.getElementById('app'));
 
-import {Root} from "./components/Root";
-import {Home} from "./components/Home";
-import {User} from "./components/User";
+import {createStore} from "redux";
 
-class App extends React.Component{
-      render(){
-            return(
-                  <Router history={browserHistory}>
-                        <Route path={"/"} component={Root}>
-                              {/*IndexRoute aggrages various URLs like domain.io/ or domain.io/home to the same home component URL*/}
-                              <IndexRoute component={Home}  />
-                              {/*The Root component persists as the /child components are rendered below*/}
-                              <Route path={"user/:id"} component={User} />
-                              <Route path={"home"} component={Home} />
-                        </Route>
-                        {/*A component that is not a child of root.*/}
-                        <Route path={"home-single"} component={Home} />
-                  </Router>
-            );
+const reducer = (state, action) => {
+      switch (action.type){
+            case "ADD":
+                  state = state + action.payload;
+                  break;
+            case "SUBTRACT":
+                  state = state - action.payload;
+                  break;
       }
-}
-render(<App />, window.document.getElementById('app'));
+      return state;
+};
+//the reducer will return the appropriate state, 1 is there as the initial state
+const store = createStore(reducer , 1);
+
+store.subscribe(() => {
+    console.log("Store updated!", store.getState());
+});
+
+//by telling the store "Hey, here is a new dispatch action, the store will automatically pass this action to the reducer it has assigned to get the correct state"
+store.dispatch({
+      type: "ADD",
+      payload: 100
+});
+
+store.dispatch({
+      type: "ADD",
+      payload: 22
+});
+
+store.dispatch({
+      type: "SUBTRACT",
+      payload: 5
+});
