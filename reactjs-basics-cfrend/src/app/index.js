@@ -30,17 +30,14 @@
 //
 // render(<App />, window.document.getElementById('app'));
 
-import {createStore} from "redux";
-
-//State structure manually defined here
-const initialState = {
-            result: 1,
-            lastValues: [],
-            username: "Chauncey"
-};
+import {createStore, combineReducers, applyMiddleware} from "redux";
+import logger from "redux-logger";
 
 //using an es6 convention below state = initialState where state will be assigned the first value in initialState if a new state is not dispatched.
-const reducer = (state = initialState, action) => {
+const mathReducer = (state = {
+      result: 1,
+      lastValues: []
+}, action) => {
       switch (action.type){
             case "ADD":
                   //create a new js object to get away from using an immutible object
@@ -63,8 +60,44 @@ const reducer = (state = initialState, action) => {
       }
       return state;
 };
+
+const userReducer = (state = {
+      name: "Chauncey",
+      age: 32
+}, action) => {
+      switch (action.type){
+            case "SET_NAME":
+                  //create a new js object to get away from using an immutible object
+                  state = {
+                        //es6 quick and easy convention "spread operator" ...  to copy the input state structure
+                        ...state,
+                        name: action.payload
+                  };
+                  break;
+            case "SET_AGE":
+                  //create a new js object to get away from using an immutible object
+                  state = {
+                        //es6 quick and easy convention "spread operator" ...  to copy the input state structure
+                        ...state,
+                        age: action.payload
+                  };
+                  break;
+      }
+      return state;
+};
+
+//Middleware custom initialization
+const myLogger = (state) => (next) => (action) => {
+    // console.log("Logged Action: ", action);
+    next(action);
+};
+
 //the reducer will return the appropriate state
-const store = createStore(reducer);
+const store = createStore(
+    combineReducers({mathReducer, userReducer}),
+    {},
+    applyMiddleware(myLogger, logger())
+);
 
 store.subscribe(() => {
     console.log("Store updated!", store.getState());
@@ -84,4 +117,9 @@ store.dispatch({
 store.dispatch({
       type: "SUBTRACT",
       payload: 5
+});
+
+store.dispatch({
+      type: "SET_AGE",
+      payload: 30
 });
