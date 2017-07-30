@@ -32,19 +32,39 @@
 
 import {createStore} from "redux";
 
-const reducer = (state, action) => {
+//State structure manually defined here
+const initialState = {
+            result: 1,
+            lastValues: [],
+            username: "Chauncey"
+};
+
+//using an es6 convention below state = initialState where state will be assigned the first value in initialState if a new state is not dispatched.
+const reducer = (state = initialState, action) => {
       switch (action.type){
             case "ADD":
-                  state = state + action.payload;
+                  //create a new js object to get away from using an immutible object
+                  state = {
+                        //es6 quick and easy convention "spread operator" ...  to copy the input state structure
+                        ...state,
+                        result: state.result + action.payload,
+                        lastValues: [...state.lastValues, action.payload]
+                  };
                   break;
             case "SUBTRACT":
-                  state = state - action.payload;
+                  //create a new js object to get away from using an immutible object
+                  state = {
+                        //es6 quick and easy convention "spread operator" ...  to copy the input state structure
+                        ...state,
+                        result: state.result - action.payload,
+                        lastValues: [...state.lastValues, action.payload]
+                  };
                   break;
       }
       return state;
 };
-//the reducer will return the appropriate state, 1 is there as the initial state
-const store = createStore(reducer , 1);
+//the reducer will return the appropriate state
+const store = createStore(reducer);
 
 store.subscribe(() => {
     console.log("Store updated!", store.getState());
