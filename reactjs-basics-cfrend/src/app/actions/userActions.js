@@ -1,12 +1,25 @@
 export function setName (name) {
-      return{
+      //return dispatch => {
+            //simulating reaching out to a server that will take 2 seconds
+            // setTimeout(() => {
+            //       dispatch({
+            //             type: "SET_NAME",
+            //             payload: name
+            //       });
+            // }, 2000);
+      //}
+      return {
             type: "SET_NAME",
-            payload: name
-      }
+            payload: new Promise((resolve, reject) => {
+                  setTimeout(() => {
+                        resolve(name);
+                  }, 2000);
+            })
+      };
 }
 export function setAge (age) {
       return{
             type: "SET_AGE",
             payload: age
-      }
+      };
 }
